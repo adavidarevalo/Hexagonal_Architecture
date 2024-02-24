@@ -1,11 +1,7 @@
-import Car from "@/core/basics/Car"
-import Beetle from "@/core/basics/beetle"
-import Ferrari from "@/core/basics/ferrari"
 import User from "@/core/user/model/user"
-import InvertCryptoPass from "@/adapter/auth/InvertCryptoPass"
 import UserRegister from "@/core/user/service/userRegister"
 import TerminalUtil from "@/util/TerminalUtil"
-import { terminal } from "terminal-kit"
+import PassCrypto from "@/adapter/auth/PassCrypto"
 
 export default async function createUser() {
     TerminalUtil.title("Create User")
@@ -22,7 +18,7 @@ export default async function createUser() {
         password,
     }
 
-    const cryptoProvider = new InvertCryptoPass()
+    const cryptoProvider = new PassCrypto()
 
     await new UserRegister(cryptoProvider).execute(user)
 

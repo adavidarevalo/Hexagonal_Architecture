@@ -3,7 +3,6 @@ import User from "../model/user"
 import UserRepositoryInMemory from "./UserRepositoryInMemory"
 import Errors from "@/core/shared/Error"
 import Id from "@/core/shared/Id"
-import InvertCryptoPass from "../../../adapter/auth/InvertCryptoPass"
 import CryptoProvider from "./CryptoProvider"
 
 export default class UserRegister
