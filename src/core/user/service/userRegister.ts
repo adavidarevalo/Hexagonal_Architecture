@@ -1,20 +1,24 @@
 import CaseOfUse from "@/core/shared/CaseOfUse"
 import User from "../model/user"
-import UserRepositoryInMemory from "./UserRepositoryInMemory"
+import UserRepositoryInMemory from "../../../adapter/db/UserRepositoryInMemory"
 import Errors from "@/core/shared/Error"
 import Id from "@/core/shared/Id"
 import CryptoProvider from "./CryptoProvider"
+import UserRepository from "./UserRepository"
 
 export default class UserRegister
     implements CaseOfUse<User, void>
 {
-    constructor(private cryptoProvider: CryptoProvider) {}
+    constructor(
+        private cryptoProvider: CryptoProvider,
+        private userRepository: UserRepository
+    ) {}
     async execute(user: User): Promise<void> {
         const cryptoPass = this.cryptoProvider.cryptoPass(
             user.password
         )
-        const repo = new UserRepositoryInMemory()
-        const userExist = await repo.findByMail(user.mail)
+        const userExist =
+            await this.userRepository.findByMail(user.mail)
         if (userExist) {
             throw new Error(Errors.UserAlreadyExists)
         }
@@ -26,6 +30,6 @@ export default class UserRegister
             password: cryptoPass,
         }
 
-        await repo.create(newUser)
+        await this.userRepository.create(newUser)
     }
 }
